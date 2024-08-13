@@ -1,0 +1,61 @@
+import boto3
+import os
+from botocore.exceptions import ClientError
+
+db = boto3.resource('dynamodb')
+s3_client = boto3.client('s3')
+
+def lambda_handler(event, context):
+    bucket = event['Records'][0]['s3']['bucket']['name']
+    key = event['Records'][0]['s3']['object']['key']
+    task_id = os.path.dirname(key)
+    task = retreive_task(task_id) 
+    #if task is None:
+        
+    if task['TaskStatus'] != 'Processing':
+        print(task['TaskStatus'])
+        return
+    total_subjects = task['Subjects']
+    processed_subjects = 0
+    if 'TotalProcessed' in task:
+        processed_subjects = task['TotalProcessed']
+    if processed_subjects < total_subjects:
+        current_count = get_subjects_processed(task_id)
+        if current_count == 0:
+            return
+        elif current_count < total_subjects:
+            update_task_status(task_id, task['TaskStatus'], current_count)
+        else:
+            update_task_status(task_id, 'Complete', total_subjects)
+
+def retreive_task(task_id):
+    try:
+        table = db.Table('FileProcessingTask')
+        response = table.get_item(Key={'TaskId': task_id})
+        return response['Item']
+    except ClientError as err:
+        print(err)
+        return None
+        
+def update_task_status(task_id, task_status, total_processed):
+    try:
+        table = db.Table('FileProcessingTask')
+        response = table.update_item(
+            Key={'TaskId':task_id},
+            UpdateExpression = 'SET TaskStatus=:s, TotalProcessed=:p',
+            ExpressionAttributeValues = {
+                ':s': task_status,
+                ':p': total_processed
+            },
+            ReturnValues='NONE'
+        )
+        return(response)
+    except ClientError as err:
+        print(err)
+    
+def get_subjects_processed(task_id):
+    response = s3_client.list_objects_v2(Bucket='eeg-data-clean', Prefix=task_id)
+    if ('Contents' in response):
+       return len(response['Contents'])
+    return 0   
+    
