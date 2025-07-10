@@ -1,0 +1,15 @@
+services:
+  frontend:
+
+  preprocess:
+  
+  process:
+
+  pulsar:
+
+  backend:
+
+  db:
+
+  adminer:
+  
