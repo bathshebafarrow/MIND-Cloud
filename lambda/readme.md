@@ -1,7 +1,4 @@
 ## Lambda functions 
 Several lambda functions were used to trigger various stages of processing
 
-### New file records in DynamoDB (following file uploads by users)
-
-
-### Preprocessing completed (data added to S3)
+These will no longer be needed but are here as a reference for now.
