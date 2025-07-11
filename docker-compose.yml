@@ -18,6 +18,12 @@ services:
     depends_on:
       - db
 
+  pulsar:
+    image: apachepulsar/pulsar:4.0.5
+    ports:
+      - 6650:6650
+    command: bin/pulsar standalone
+
   db:
     container_name: eeg-db
     image: postgres:17.5
