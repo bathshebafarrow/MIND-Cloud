@@ -1,17 +1,17 @@
+"""
+Author: Bathsheba Jackson
+Date Created: 2025-07-10
+Last Modified: 2025-07-10
+Version: 1.0
+"""
 import os
 import mne
 from mne.io import read_raw_brainvision, read_raw_bdf, read_raw_edf, read_raw_eeglab
 
-# Install the Python MNE library before running: pip install mne 
-
-def visualize():
-    # REPLACE YOUR FILENAME BELOW
-    filename = "sub-001_task-eyesclosed_eeg.set"
-
+def visualize(filename: str):
     filename_parts = os.path.splitext(os.path.basename(filename))
     file_extension = filename_parts[1]
 
-    # Refer to methods for reading files here: https://mne.tools/stable/api/reading_raw_data.html
     if file_extension == '.vhdr':
         raw = read_raw_brainvision(filename, preload=True)
     elif file_extension == '.bdf':
@@ -32,8 +32,3 @@ def visualize():
     mne.viz.plot_layout("standard_1020")
 
     trans = mne.read_trans(filename)
-
-    # Refer to website for other visualizations: https://mne.tools/stable/auto_examples/visualization/index.html
-
-if __name__=="__main__":
-    visualize()

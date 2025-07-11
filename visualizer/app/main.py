@@ -4,11 +4,11 @@ Date Created: 2025-07-10
 Last Modified: 2025-07-10
 Version: 1.0
 """
-from consumer import FeatureTaskConsumer
+from consumer import VisualTaskConsumer
 
 def main():
     try:
-        with FeatureTaskConsumer() as consumer:
+        with VisualTaskConsumer() as consumer:
             consumer.process_tasks()
     except KeyboardInterrupt:
         print("\nExiting the application.")

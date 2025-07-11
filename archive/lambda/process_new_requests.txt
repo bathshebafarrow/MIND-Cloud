@@ -1,0 +1,49 @@
+import boto3
+import json
+import urllib3
+
+from botocore.exceptions import ClientError
+
+def lambda_handler(event, context):
+    if 'Records' not in event:
+        print('exiting.... no records')
+        return
+    batch_item_failures = []
+    batch_response = {}
+
+    sqs = boto3.client('sqs',  region_name='us-east-1')
+    
+    queue_url = 'https://sqs.us-east-1.amazonaws.com/XXXXXXX/FilePreprocessingQueue'
+    for record in event['Records']:
+        print(record)
+        if record['eventName'] == "INSERT" and record['dynamodb']['StreamViewType'] == 'NEW_IMAGE':
+            try:
+                curr_record = record['dynamodb']['NewImage']
+                if 'SourceDB' not in curr_record:
+                    print(f'exiting: {curr_record}')
+                    continue
+
+                json_data = json.dumps({
+                    "task_id": curr_record['TaskId']['S'], 
+                    "bucket": curr_record['SourceDB']['S'], 
+                    "study": curr_record['StudyId']['S'], 
+                    "subject": curr_record['SubjectId']['L'],
+                    "params": curr_record['Parameters']['M']
+                })
+                resp = sqs.send_message(QueueUrl=queue_url, MessageBody=json_data)
+                print(f'Sent to queue: {resp}')
+                invoke_workers()
+            except ClientError as err:
+                print(err)
+                batch_item_failures.append({"task_id": record['dynamodb']['NewImage']['TaskId']['S'], 'error' : str(err)})
+                
+    batch_response["batchItemFailures"] = batch_item_failures
+    return batch_response
+                
+def invoke_workers():
+    try:
+        http = urllib3.PoolManager()
+        resp = http.request('POST', 'http://eeg-data-processor-load-balancer-345582879.us-east-1.elb.amazonaws.com/process')  
+        print(resp.data)
+    except Exception as err:
+        print(f'Could not send message to service {err}')

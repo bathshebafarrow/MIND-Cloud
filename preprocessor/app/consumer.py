@@ -7,7 +7,7 @@ Version: 1.0
 import pulsar
 from config import settings
 
-class FeatureTaskConsumer:
+class VisualTaskConsumer:
     def __init__(self, resource):
         self.pulsar_url = f'pulsar://{settings.PULSAR_HOST}:{settings.PULSAR_PORT}'
 
@@ -23,7 +23,7 @@ class FeatureTaskConsumer:
         while True:
             msg = self.consumer.receive()
             # Add logic to process messages
-
+            
             self.consumer.acknowledge(msg)
     def __exit__(self, exc_type, exc_value, traceback):
         if self.consumer:
