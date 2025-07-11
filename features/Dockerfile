@@ -1,16 +1,11 @@
-# Set base image (host OS)
-FROM python:3.11
+FROM python:3.12.11-alpine
 
-# Copy everything from the source directory
-COPY app/ /app/
-
-# Install any dependencies
-RUN pip install --no-cache-dir -r requirements.txt
-
-# Set the working directory in the image
 WORKDIR /app
 
-CMD [ "python", "main.py" ]
+COPY requirements.txt .
 
-# docker build . -t eeg-data-analysis:latest
-# Obtain push commands from AWS ECR repository
+RUN pip install --no-cache-dir -r requirements.txt
+
+COPY /app .
+
+CMD [ "python", "main.py" ]
