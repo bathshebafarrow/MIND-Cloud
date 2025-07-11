@@ -3,4 +3,4 @@
 
 This repository contains code to support research in cloud-based EEG preprocessing. 
 
-It is currently being reworked to run independently of all specific cloud service provider.
+It is currently being reworked to run independently of any specific cloud service provider.
