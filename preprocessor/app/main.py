@@ -1,9 +1,14 @@
-from app.config import SQS_URL
-from worker import FileQueueWorker
+"""
+Author: Bathsheba Jackson
+"""
+from consumer import JobConsumer
 
-def processQueue():
-    with FileQueueWorker(SQS_URL) as worker:
-        worker.process_queue()
+def main():
+    try:
+        with JobConsumer() as consumer:
+            consumer.process_messages()
+    except KeyboardInterrupt:
+        print("\nExiting the application.")
 
 if __name__ == "__main__":
-    processQueue()
+    main()

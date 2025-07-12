@@ -1,12 +1,21 @@
 services:
-  #frontend:
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: frontend
+    ports:
+      - 5000:5000
+
+  #preprocessor:
   #  build:
-  #    context: ./frontend
+  #    context: ./preprocessor
   #    dockerfile: Dockerfile
-  #  container_name: frontend
-  #preprocesser:
-  #processer:
-  #visualizer:
+  #  container_name: preprocessor
+  #  volumes:
+  #   - ./data_files:/data_files
+  #  depends_on: 
+  #    - backend
 
   backend:
     build:
@@ -18,11 +27,11 @@ services:
     depends_on:
       - db
 
-  pulsar:
-    image: apachepulsar/pulsar:4.0.5
-    ports:
-      - 6650:6650
-    command: bin/pulsar standalone
+  #pulsar:
+  #  image: apachepulsar/pulsar:4.0.5
+  #  ports:
+  #    - 6650:6650
+  #  command: bin/pulsar standalone
 
   db:
     container_name: eeg-db
@@ -39,6 +48,8 @@ services:
 
   adminer:
     image: adminer:5.3.0
+    ports:
+      - 8080:8080
     depends_on:
       - db
     environment:

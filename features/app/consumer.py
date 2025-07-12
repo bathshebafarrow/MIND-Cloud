@@ -1,13 +1,12 @@
 """
 Author: Bathsheba Jackson
 Date Created: 2025-07-10
-Last Modified: 2025-07-10
-Version: 1.0
 """
+import json
 import pulsar
 from config import settings
 
-class FeatureTaskConsumer:
+class JobConsumer:
     def __init__(self, resource):
         self.pulsar_url = f'pulsar://{settings.PULSAR_HOST}:{settings.PULSAR_PORT}'
 
@@ -21,10 +20,9 @@ class FeatureTaskConsumer:
 
     def process_tasks(self):
         while True:
-            msg = self.consumer.receive()
-            # Add logic to process messages
-
-            self.consumer.acknowledge(msg)
+            message = self.consumer.receive()
+            json_object = json.loads(message.data().decode('utf-8'))
+            self.consumer.acknowledge(message)
     def __exit__(self, exc_type, exc_value, traceback):
         if self.consumer:
             self.consumer.close()

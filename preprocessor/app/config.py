@@ -23,5 +23,3 @@ S3_SECRET_KEY = ''
 
 # The default region when creating new connections.
 S3_REGION_NAME = 'us-east-1'
-
-SQS_URL = 'https://sqs.us-east-1.amazonaws.com/XXXXX'

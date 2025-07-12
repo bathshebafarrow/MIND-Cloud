@@ -48,16 +48,7 @@ def retreive_task(task_id):
         return None
 
 def retreive_all_tasks():
-    try:
-        db = application.get_db_client()
-        table = db.Table('FileProcessingTask')
-        response = table.scan()
-        return response['Items']
-    except ClientError as err:
-        logger.error("Could not retrieve the records: %s: %s", 
-                     err.response['Error']['Code'],
-                     err.response['Error']['Message'])
-        return []
+    return []
         
 def update_task_status(task_id, task_status):
     try:

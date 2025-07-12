@@ -15,8 +15,9 @@ from flask import request, render_template, redirect, Response, url_for, flash, 
 def index():
     return render_template('index.html')
 
+
 @application.route('/results')
-def results():
+def download_results():
     taskId = request.args.get('taskid')
     file_name = f'{taskId}/eeg_processed_data.zip'
     # User to download file
@@ -90,7 +91,7 @@ def get_study_choices(bucket_id):
 def subjects_for_study(study_id, bucket):
     subjects = task_manager.get_subject_list(bucket, study_id)
     return jsonify({'subjects': subjects})
-        
+  
 def valid_subject(subject_id):
     values = subject_id.replace(" ", "").split('-')
     if len(values) == 1 and values[0].isdigit():
