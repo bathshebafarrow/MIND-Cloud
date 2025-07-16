@@ -23,6 +23,7 @@ class JobConsumer:
             message = self.consumer.receive()
             json_object = json.loads(message.data().decode('utf-8'))
             self.consumer.acknowledge(message)
+
     def __exit__(self, exc_type, exc_value, traceback):
         if self.consumer:
             self.consumer.close()
