@@ -1,0 +1,15 @@
+.nav-link {
+    text-decoration: none;
+}
+
+.nav-link.active {
+    font-weight: bold;
+}
+
+.navbar {
+    margin-top: 1rem;
+    margin-bottom: 2rem;
+    display: flex;
+    gap: 1.5rem;
+    color:whitesmoke;
+}
