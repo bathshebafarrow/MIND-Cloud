@@ -7,15 +7,17 @@ services:
   #  ports:
   #    - 5000:5000
 
-  #pyprep:
-  #  build:
-  #    context: ./preprocessor
-  #    dockerfile: Dockerfile
-  #  container_name: preprocessor
-  #  volumes:
-  #   - ./data_files:/data_files
-  #  depends_on: 
-  #    - backend
+  pyprep:
+    build:
+      context: ./pyprep-process
+      dockerfile: Dockerfile
+    container_name: pyprep
+    volumes:
+     - ./results:/results
+    depends_on: 
+      - backend
+    networks:
+      - mind-cloud
 
   backend:
     build:
@@ -26,6 +28,7 @@ services:
       - 8000:8000
     depends_on:
       - db
+      - pulsar
     networks:
       - mind-cloud
 

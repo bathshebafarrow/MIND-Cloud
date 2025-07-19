@@ -1,13 +1,16 @@
 from pydantic import BaseModel
-from typing import Any, Dict
+from typing import Any
 
 
 class Job(BaseModel):
     id: int
+    username: str
     source_db: str
     study_id: str    
-    subject_id: id 
-    parameters: Dict[str, Any]
+    subjects: list[str] = []  
+    parameters: dict[str, Any] = {}
+    created_at: float
+    total_processed: int
     status: str
 
 class JobUpdate(BaseModel):

@@ -18,11 +18,10 @@ class JobInput(BaseModel):
 class JobResponse(JobInput):
     id: int
     created_at: float
-    total_processed: int = 0
+    total_processed: int
 
 class JobUpdate(BaseModel):
     id: int
-    total_processed: int
     status: str
 
     model_config = ConfigDict(extra='ignore')

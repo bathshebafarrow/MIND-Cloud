@@ -3,40 +3,46 @@ Author: Bathsheba Jackson
 Date Created: 2025-07-10
 """
 import json
-import pulsar
 import requests
-from models import Job, JobUpdate
 from config import settings
-from prepare import archive_results, download_study_data
+from models import Job, JobUpdate
+from prepare import cleanup_files, prepare_study_data
 from preprocess import preprocess_subject
+from pulsar import Client, Consumer, ConsumerType
 
 class JobConsumer:
+    client: Client
+    consumer: Consumer
+    
     def __init__(self):
-        self.pulsar_url = settings.PULSAR_URL
+        self.topic = settings.PULSAR_TOPIC
 
     def __enter__(self):
-        self.client = pulsar.Client(self.pulsar_url)
+        self.client = Client(settings.PULSAR_URL)
         self.consumer = self.client.subscribe(
-            topic=settings.PULSAR_TOPIC,
+            topic=self.topic,
             subscription_name=settings.PULSAR_SUBSCRIPTION,
-            subscription_type=pulsar.ConsumerType.Shared
+            subscription_type=ConsumerType.Shared
         )
+        return self
 
     def process_messages(self):
         """
         Processes messages on the Pulsar topic.
         """
         while True:
-            message = self.consumer.receive()
             try:
+                message = self.consumer.receive()
                 data = message.data().decode('utf-8')
                 job = Job(**json.loads(data))
-                job_dir = download_study_data(job)
-                preprocess_subject(job, job_dir)
-                archive_results(job)
+                input_dir, output_dir = prepare_study_data(job)
+                preprocess_subject(job, input_dir, output_dir)
+                cleanup_files(input_dir)
+
                 self.update_job(job, "PROCESSED")
                 self.consumer.acknowledge(message)
             except Exception as ex:
+                print(ex)
                 self.update_job(job, "ERROR")
                 self.consumer.negative_acknowledge(message)
 

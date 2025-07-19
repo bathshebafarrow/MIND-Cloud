@@ -17,7 +17,7 @@ matplotlib.use('Agg')
 mne.set_log_level(verbose=None, return_old_level=False)
 mne.set_log_level('WARNING')
 
-def preprocess_subject(job: Job, input_dir: str) -> None:
+def preprocess_subject(job: Job, input_dir: str, output_dir: str) -> None:
     """
     Processes the subject's EEG data files as referenced in the job.
 
@@ -27,7 +27,6 @@ def preprocess_subject(job: Job, input_dir: str) -> None:
         The path to the files to be processed.
     """
     logger.info(f'Preprocessing {job.subject_id} for job {job.id}')
-    output_dir = f'{input_dir}/results/'
     os.makedirs(output_dir, exist_ok=True)
     
     raw = None
