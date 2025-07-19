@@ -1,5 +1,5 @@
 """
-Research code - use mne and pyprep libraries to process EEG data
+Use mne and pyprep libraries to process EEG data files.
 """
 import matplotlib
 import matplotlib.pyplot as plt

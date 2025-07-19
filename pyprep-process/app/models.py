@@ -1,7 +1,6 @@
 from pydantic import BaseModel
 from typing import Any
 
-
 class Job(BaseModel):
     id: int
     username: str
