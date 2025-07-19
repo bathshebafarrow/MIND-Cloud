@@ -17,10 +17,27 @@ To create the services and run the application locally:
 
 ## Application Services
 
-1. Frontend
-2. Preprocessor
-3. Backend
-4. Pulsar
-5. PostgreSQL
-6. Adminer
+Several services have been defined in the docker-compose.yml file. These services are described in the subsections that follow.
 
+### Frontend
+
+### Preprocessor
+
+### Backend
+
+API Documentation is found at http://localhost:8000/docs
+
+### Pulsar
+
+### PostgreSQL (db)
+
+### Adminer
+
+Adminer is a free and open-source web-based database management tool that provides access to the PostgreSQL database. To log into the adminer, use a web browser to go to the URL `http://localhost:8080/` and use the settings as found in `backend > app > config`:
+
+    - System: PostgresQL
+    - Server: eeg-db
+    - Username: eeg_user
+    - Password: password
+
+These settings in config.py can be modified if desired.

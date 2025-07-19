@@ -6,9 +6,7 @@ from datetime import datetime, timezone
 from models.base import Base
 from models.file import File
 from sqlalchemy import ARRAY, Float, Integer, JSON, String
-from sqlalchemy.dialects.postgresql import JSONB
 from sqlalchemy.orm import Mapped, mapped_column, relationship
-from typing import Any, TYPE_CHECKING
 
 
 class Job(Base):

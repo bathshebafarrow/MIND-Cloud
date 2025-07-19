@@ -9,10 +9,11 @@ from sqlalchemy.orm import Mapped, mapped_column, relationship
 class Repository(Base):
     __tablename__ = "repository"
 
-    id: Mapped[int] = mapped_column(Integer, primary_key=True, index=True, autoincrement=True)
+    id: Mapped[int] = mapped_column(Integer, primary_key=True, index=True, autoincrement=False)
     bucket_name: Mapped[str] = mapped_column(String, unique=True, nullable=False)
+    display_name: Mapped[str] = mapped_column(String, unique=True, nullable=False)
     description: Mapped[str] = mapped_column(String, nullable=True)
-    studies: Mapped[list["Study"]] = relationship(back_populates="repository", lazy="selectin")
+    studies: Mapped[list["Study"]] = relationship(back_populates="repository", lazy="joined")
 
 class Study(Base):
     __tablename__ = "study"

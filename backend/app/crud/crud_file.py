@@ -37,10 +37,48 @@ def create_file(db: Session, file: FileInput) -> File:
         )
 
 def retrieve_file(db: Session, file_id: int) -> list[File]:
-    return db.query(File).where(File.id == file_id).one_or_none()
+    """
+    Retrieve the File record with the unique identifier.
+
+    Parameters
+    ----------
+    db: Session
+        The database session.
+
+    Returns
+    -------
+    The list of File records.
+    """
+    try:
+        return db.query(File).where(File.id == file_id).one_or_none()
+    except Exception as ex:
+        print(ex)
+        raise HTTPException(
+            status_code=500,
+            detail=f"Error occurred while retrieve the file {file_id}: {ex}"
+        )
 
 def retrieve_files(db: Session) -> list[File]:
-    return db.query(File).all()
+    """
+    Retrieve all File records in the database.
+    
+    Parameters
+    ----------
+    db: Session
+        The database session.
+
+    Returns
+    -------
+    The list of File records.
+    """
+    try:
+        return db.query(File).all()
+    except Exception as ex:
+        print(ex)
+        raise HTTPException(
+            status_code=500,
+            ddetail=f"Error occurred while retrieve files: {ex}"
+        )
 
 def delete_file(db: Session, file_id: int):
     try:

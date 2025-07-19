@@ -6,7 +6,7 @@ from fastapi import HTTPException
 from models.job import Job
 from schemas.job import JobInput
 from service.producer import JobProducer
-from sqlalchemy import delete, select
+from sqlalchemy import delete
 from sqlalchemy.orm import Session
 from typing import List
 
@@ -42,7 +42,7 @@ def create_job(db: Session, job: JobInput, producer: JobProducer) -> Job:
         print(ex)
         raise HTTPException(
             status_code=500,
-            detail="Could not create a new job"
+            detail="Could not create a new Job record"
         )
 
 def retrieve_jobs(db: Session) -> List[Job]:
@@ -59,13 +59,12 @@ def retrieve_jobs(db: Session) -> List[Job]:
     The list of Job records.
     """
     try:
-        results = db.query(Job).all()
-        return results
+        return db.query(Job).all()
     except Exception as ex:
         print(ex)
         raise HTTPException(
             status_code=500,
-            detail=f"Could not retrieve jobs: {ex}"
+            detail=f"Could not retrieve Job records: {ex}"
         )
 
 def retrieve_job(db: Session, job_id: int) -> Job:
@@ -84,13 +83,12 @@ def retrieve_job(db: Session, job_id: int) -> Job:
     The list of Job records.
     """
     try:
-        result = db.query(Job).where(Job.id == job_id).one_or_none()
-        return result
+        return db.query(Job).where(Job.id == job_id).one_or_none()
     except Exception as ex:
         print(ex)
         raise HTTPException(
             status_code=500,
-            detail=f"Could not retrieve jobs: {ex}"
+            detail=f"Could not retrieve the Job {job_id}: {ex}"
         )
 
 def delete_job(db: Session, job_id: int):
@@ -112,5 +110,5 @@ def delete_job(db: Session, job_id: int):
         print(ex)
         raise HTTPException(
             status_code=500,
-            detail=f"Could not create delete job {job_id}: {ex}"
+            detail=f"Could not create delete Job {job_id}: {ex}"
         )
