@@ -8,9 +8,7 @@ class Settings(BaseModel):
 
     PREPROCESS_TOPIC: str = 'persistent://public/default/preprocess'
 
-    PULSAR_HOST: str = 'localhost'
-    
-    PULSAR_PORT: str = '6650'
+    PULSAR_URL: str = 'pulsar://pulsar:6650'
     
     DB_HOST: str = 'eeg-db'
 

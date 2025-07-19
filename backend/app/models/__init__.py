@@ -2,4 +2,4 @@
 Author: Bathsheba Jackson
 Date Created: 2025-07-10
 """
-from .base import Base
+from models.base import Base

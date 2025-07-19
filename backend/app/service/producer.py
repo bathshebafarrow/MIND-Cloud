@@ -3,26 +3,30 @@ Author: Bathsheba Jackson
 Date Created: 2025-07-11
 """
 import json
-import pulsar
 from models.job import Job
 from config import settings
+from pulsar import Client, Producer
 
-class PulsarProducer:
+class JobProducer:
+
+    client: Client
+    producer: Producer
+
     """
     Produces messages on the specified Pulsar topic.
     """
-    def __init__(self, topic: str):
-        self.topic = topic
-        self.pulsar_url = f'pulsar://{settings.PULSAR_HOST}:{settings.PULSAR_PORT}'
+    def __init__(self):
+        self.topic = settings.PREPROCESS_TOPIC
 
     def __enter__(self):
-        self.client = pulsar.Client(self.pulsar_url)
+        self.client = Client(settings.PULSAR_URL)
         self.producer = self.client.create_producer(topic=self.topic)
+        return self
 
     def publish_tasks(self, job: Job) -> bool:
         """
-        Publishes separate tasks to the Pulsar topic for subject in the job so that multiple 
-        workers can process jobs as necessary.
+        Publishes separate job tasks to the Pulsar topic for subject in the job so 
+        that multiple workers can process jobs as necessary.
 
         Parameters
         ----------
@@ -55,8 +59,10 @@ class PulsarProducer:
         if self.client:
             self.client.close()
 
-def publish_preprocessing_tasks(job: Job) -> bool:
-    success = False
-    with PulsarProducer(settings.PREPROCESS_TOPIC) as producer:
-        success = producer.publish_tasks(job)
-    return success
+
+def get_job_producer():
+    """
+    Generates a Job producer.
+    """
+    with JobProducer() as producer:
+        yield producer

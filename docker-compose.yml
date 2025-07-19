@@ -7,7 +7,7 @@ services:
   #  ports:
   #    - 5000:5000
 
-  #preprocessor:
+  #pyprep:
   #  build:
   #    context: ./preprocessor
   #    dockerfile: Dockerfile
@@ -23,15 +23,19 @@ services:
       dockerfile: Dockerfile
     container_name: backend
     ports:
-      - 8005:8005
+      - 8000:8000
     depends_on:
       - db
+    networks:
+      - mind-cloud
 
   pulsar:
     image: apachepulsar/pulsar:4.0.5
     ports:
       - 6650:6650
     command: bin/pulsar standalone
+    networks:
+      - mind-cloud
 
   db:
     container_name: eeg-db
@@ -45,6 +49,8 @@ services:
       - POSTGRES_PASSWORD=password
     volumes: 
       - db_data:/var/lib/postgresql/data
+    networks:
+      - mind-cloud
 
   adminer:
     image: adminer:5.3.0
@@ -55,7 +61,13 @@ services:
     environment:
       - ADMINER_DEFAULT_DRIVER=pgsql
       - ADMINER_DEFAULT_SERVER=eeg-db
+    networks:
+      - mind-cloud
   
 volumes:
   db_data:
     driver: local
+
+networks:
+  mind-cloud:
+    driver: bridge

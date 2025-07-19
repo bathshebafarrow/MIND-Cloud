@@ -12,8 +12,6 @@ class Settings(BaseModel):
 
     PULSAR_SUBSCRIPTION: str = 'feature-extractor'
 
-    PULSAR_HOST: str = 'localhost'
-    
-    PULSAR_PORT: str = '6650'
+    BROKER_URL: str = 'pulsar://pulsar:6650'
 
 settings = Settings()

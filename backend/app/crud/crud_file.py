@@ -36,6 +36,9 @@ def create_file(db: Session, file: FileInput) -> File:
             detail="Could not create a new job"
         )
 
+def retrieve_file(db: Session, file_id: int) -> list[File]:
+    return db.query(File).where(File.id == file_id).one_or_none()
+
 def retrieve_files(db: Session) -> list[File]:
     return db.query(File).all()
 

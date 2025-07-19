@@ -18,7 +18,7 @@ class File(Base):
     __tablename__ = "file"
 
     id: Mapped[int] = mapped_column(Integer, primary_key=True, index=True, autoincrement=True)
-    job_id: Mapped[id] = mapped_column(Integer, ForeignKey("job.id"))
+    job_id: Mapped[int] = mapped_column(Integer, ForeignKey("job.id"))
     job: Mapped["Job"] = relationship("Job", back_populates="files")
     subject_id: Mapped[str] = mapped_column(String)
     created_at: Mapped[float] = mapped_column(Float, default=lambda: datetime.now(timezone.utc).timestamp())

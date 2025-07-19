@@ -16,4 +16,6 @@ class Settings(BaseModel):
 
     DEFAULT_MONTAGE = 'standard_1005'
 
+    PULSAR_URL: str = 'pulsar://pulsar:6650'
+
 settings = Settings()

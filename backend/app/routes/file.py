@@ -10,7 +10,7 @@ from sqlalchemy.orm import Session
 
 router = APIRouter(prefix="/file", tags=["file"])
 
-@router.get("/", response_model=FileResponse)
+@router.get("", response_model=list[FileResponse])
 def get_files(db: Session = Depends(get_db)):
     return retrieve_files(db)
     

@@ -20,5 +20,5 @@ class Study(Base):
     id: Mapped[int] = mapped_column(Integer, primary_key=True, index=True, autoincrement=True)
     study_id: Mapped[str] = mapped_column(String(50), nullable=False)
     description: Mapped[str] = mapped_column(String, nullable=False)
-    repository_id: Mapped[id] = mapped_column(Integer, ForeignKey("repository.id"))
+    repository_id: Mapped[int] = mapped_column(Integer, ForeignKey("repository.id"))
     repository: Mapped["Repository"] = relationship("Repository", back_populates="studies")

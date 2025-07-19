@@ -12,7 +12,7 @@ from preprocess import preprocess_subject
 
 class JobConsumer:
     def __init__(self):
-        self.pulsar_url = f'pulsar://{settings.PULSAR_HOST}:{settings.PULSAR_PORT}'
+        self.pulsar_url = settings.PULSAR_URL
 
     def __enter__(self):
         self.client = pulsar.Client(self.pulsar_url)
