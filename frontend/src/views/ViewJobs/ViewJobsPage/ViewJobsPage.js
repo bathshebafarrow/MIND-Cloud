@@ -2,11 +2,12 @@
  * Created on: 07/19/2025
  */
 import React from "react";
+import ViewJobsTable from "../ViewJobsTable/ViewJobsTable";
 
 const ViewJobsPage = () => {
-    return (
-        <h3>View Job Status - Page Under Construction</h3>
-    );
+  return (
+    <ViewJobsTable />
+  );
 }
 
 export default ViewJobsPage;
